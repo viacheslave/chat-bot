@@ -1,6 +1,6 @@
 # README #
 
-Another messanger bot (Telegram only for now)
+Another messenger bot (Telegram only for now)
 
 ### What is this repository for? ###
 
