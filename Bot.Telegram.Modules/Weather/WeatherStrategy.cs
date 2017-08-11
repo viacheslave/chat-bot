@@ -11,7 +11,7 @@ using Bot.Telegram.Modules;
 
 namespace Bot.Telegram.Core.Strategies
 {
-	public class WeatherStrategy : IMessageProcessingStrategy
+	public class WeatherStrategy : IUpdateProcessor
 	{
 		private readonly string[] _triggerWords = { "!weather", "/weather" };
 		private readonly IApiProvider _apiProvider;
@@ -23,20 +23,26 @@ namespace Bot.Telegram.Core.Strategies
 			_weatherApiUrl = $"{appConfig.OpenWeatherUrl}?appid={appConfig.OpenWeatherKey}&units=metric";
 		}
 
-		private bool CanProcess(Message message)
+		private bool CanProcess(Update update)
 		{
+			if (update.Message == null)
+				return false;
+
+			var message = update.Message;
 			return !string.IsNullOrEmpty(message.Text) && _triggerWords.Contains(message.Text.Split(' ').First().ToLower());
 		}
 
-		public IRequest Process(Message message)
+		public IRequest Process(Update update)
 		{
-			return ProcessAsync(message).Result;
+			return ProcessAsync(update).Result;
 		}
 
-		public async Task<IRequest> ProcessAsync(Message message)
+		public async Task<IRequest> ProcessAsync(Update update)
 		{
-			if (!CanProcess(message))
+			if (!CanProcess(update))
 				return null;
+
+			var message = update.Message;
 
 			var args = message.Text.Split(' ');
 			var city = args.Length > 1 ? args[1] : "kharkiv";
