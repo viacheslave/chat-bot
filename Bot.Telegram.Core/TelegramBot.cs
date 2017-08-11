@@ -1,7 +1,7 @@
 ﻿using Bot.Common;
 using Bot.Telegram.Core.Abstraction;
-using Bot.Telegram.Core.Models;
 using Bot.Telegram.CoreAbstraction;
+using Bot.Telegram.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace Bot.Telegram.Core
 		public async Task StartSafePollingAsync()
 		{
 			long offset = 0;
-			IEnumerable<UpdateResultResponse> data = null;
+			IEnumerable<Update> data = null;
 
 			while (true)
 			{

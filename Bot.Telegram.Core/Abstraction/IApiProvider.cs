@@ -8,5 +8,7 @@ namespace Bot.Telegram.CoreAbstraction
 	{
 		Task<UpdatesResponse> GetUpdatesAsync(long offset);
 		Task SendMessageAsync(IRequest messageRequest);
+		Task EditMessageText(IRequest messageRequest);
+		Task EditMessageReplyMarkup(IRequest messageRequest);
 	}
 }

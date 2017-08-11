@@ -34,5 +34,19 @@ namespace Bot.Telegram.Core
 				.AppendPathSegment("/sendMessage")
 				.PostJsonStringAsync(messageRequest.ToJsonSnakeCase());
 		}
+
+		public async Task EditMessageText(IRequest messageRequest)
+		{
+			await _apiUrl
+				.AppendPathSegment("/editMessageText")
+				.PostJsonStringAsync(messageRequest.ToJsonSnakeCase());
+		}
+
+		public async Task EditMessageReplyMarkup(IRequest messageRequest)
+		{
+			await _apiUrl
+				.AppendPathSegment("/editMessageReplyMarkup")
+				.PostJsonStringAsync(messageRequest.ToJsonSnakeCase());
+		}
 	}
 }

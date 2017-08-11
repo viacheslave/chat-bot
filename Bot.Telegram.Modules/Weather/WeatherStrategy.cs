@@ -45,7 +45,7 @@ namespace Bot.Telegram.Core.Strategies
 
 			var data = content.FromJsonSnakeCase<WeatherResponse>();
 
-			return new MessageRequest
+			return new SendMessageRequest
 			{
 				ChatId = message.Chat.Id,
 				Text = $"City\uD83C\uDF06: {data.Name}\r\nTemp\uD83C\uDF21: {data.Main.Temp}\r\nPressure: {data.Main.Pressure}\r\nMin Temp: {data.Main.TempMin}\r\nMax Temp: {data.Main.TempMax}",
