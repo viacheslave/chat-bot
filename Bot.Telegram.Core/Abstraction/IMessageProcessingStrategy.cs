@@ -6,8 +6,7 @@ namespace Bot.Telegram.Core.Abstraction
 {
 	public interface IMessageProcessingStrategy
 	{
-		MessageRequest Process(Message message);
-		Task<MessageRequest> ProcessAsync(Message message);
-		bool CanProcess(Message message);
+		IRequest Process(Message message);
+		Task<IRequest> ProcessAsync(Message message);
 	}
 }

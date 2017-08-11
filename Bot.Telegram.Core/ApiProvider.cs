@@ -1,5 +1,6 @@
 ﻿using Bot.Common;
 using Bot.Common.Serialization;
+using Bot.Telegram.Core.Abstraction;
 using Bot.Telegram.Core.Models;
 using Bot.Telegram.CoreAbstraction;
 using Flurl;
@@ -27,7 +28,7 @@ namespace Bot.Telegram.Core
 			return result.FromJsonSnakeCase<UpdatesResponse>();
 		}
 
-		public async Task SendMessageAsync(MessageRequest messageRequest)
+		public async Task SendMessageAsync(IRequest messageRequest)
 		{
 			await _apiUrl
 				.AppendPathSegment("/sendMessage")
