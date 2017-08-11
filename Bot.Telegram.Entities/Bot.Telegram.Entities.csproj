@@ -40,12 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallbackQuery.cs" />
     <Compile Include="Chat.cs" />
     <Compile Include="ChatPhoto.cs" />
+    <Compile Include="Incoming\Update.cs" />
+    <Compile Include="Inline\ChosenInlineResult.cs" />
+    <Compile Include="Inline\IInlineMarkup.cs" />
+    <Compile Include="Inline\InlineKeyboardButton.cs" />
+    <Compile Include="Inline\InlineKeyboardMarkup.cs" />
+    <Compile Include="Inline\InlineQuery.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
