@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Abstraction\IApiProvider.cs" />
     <Compile Include="Abstraction\IMessageProcessingStrategy.cs" />
+    <Compile Include="Abstraction\IRequest.cs" />
     <Compile Include="Models\UpdatesResponse.cs" />
     <Compile Include="Models\MessageRequest.cs" />
     <Compile Include="Models\UpdateResultResponse.cs" />

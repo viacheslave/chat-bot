@@ -2,6 +2,7 @@
 using Bot.Telegram.Core.Abstraction;
 using Bot.Telegram.Core.Models;
 using Bot.Telegram.CoreAbstraction;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -44,20 +45,27 @@ namespace Bot.Telegram.Core
 				{
 					foreach (var item in data)
 					{
-						if (item.Message == null || string.IsNullOrEmpty(item.Message.Text))
+						if (item.Message == null)
 							continue;
 
-						var strategy = _processors.FirstOrDefault(s => s.CanProcess(item.Message));
-						if (strategy == null)
+						var processingResults = _processors.Select(s => s.ProcessAsync(item.Message));
+						if (!processingResults.Any())
 							continue;
 
 						try
 						{
-							var request = await strategy.ProcessAsync(item.Message);
-							await _apiProvider.SendMessageAsync(request);
+							foreach (var result in processingResults)
+							{
+								var request = await result;
+								if (request == null)
+									continue;
+
+								await _apiProvider.SendMessageAsync(request);
+							}
 						}
-						catch (System.Exception ex)
+						catch (Exception ex)
 						{
+							//TODO: add exception logging
 						}
 					}
 				}
