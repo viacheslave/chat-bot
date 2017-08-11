@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Bot.Telegram.Core
 {
-	public class TelegramBot
+	public sealed class TelegramBot
 	{
 		private readonly int _pollingSleepTime;
 		private readonly IList<IUpdateProcessor> _processors;
 		private readonly IApiProvider _apiProvider;
 
-		protected TelegramBot()
+		public TelegramBot()
 		{
 			_pollingSleepTime = 500;
 
@@ -27,7 +27,12 @@ namespace Bot.Telegram.Core
 
 		public static TelegramBot Create() => new TelegramBot();
 
-		public void AddModule<T>() where T : IUpdateProcessor, new() => _processors.Add(new T());
+		public void AddModule<T>(T module) where T : IUpdateProcessor
+			=> _processors.Add(module);
+		public void AddModule<T>() where T : IUpdateProcessor, new() 
+			=> _processors.Add(new T());
+		public void AddModule<T>(Func<T> initFunc) where T : IUpdateProcessor 
+			=> _processors.Add(initFunc());
 
 		public async Task StartSafePollingAsync()
 		{
