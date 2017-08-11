@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstraction\IApiProvider.cs" />
-    <Compile Include="Abstraction\IMessageProcessingStrategy.cs" />
+    <Compile Include="Abstraction\IUpdateProcessor.cs" />
     <Compile Include="Abstraction\IRequest.cs" />
     <Compile Include="Models\EditMessageReplyMarkupRequest.cs" />
     <Compile Include="Models\EditMessageTextRequest.cs" />

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Bot.Telegram.Core.Abstraction
 {
-	public interface IMessageProcessingStrategy
+	public interface IUpdateProcessor
 	{
-		IRequest Process(Message message);
-		Task<IRequest> ProcessAsync(Message message);
+		IRequest Process(Update update);
+		Task<IRequest> ProcessAsync(Update update);
 	}
 }

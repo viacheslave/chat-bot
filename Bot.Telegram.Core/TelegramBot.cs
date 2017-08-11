@@ -13,7 +13,7 @@ namespace Bot.Telegram.Core
 	public class TelegramBot
 	{
 		private readonly int _pollingSleepTime;
-		private readonly IList<IMessageProcessingStrategy> _processors;
+		private readonly IList<IUpdateProcessor> _processors;
 		private readonly IApiProvider _apiProvider;
 
 		protected TelegramBot()
@@ -22,12 +22,12 @@ namespace Bot.Telegram.Core
 
 			var appConfig = new AppConfig();
 			_apiProvider = new ApiProvider(appConfig);
-			_processors = new List<IMessageProcessingStrategy>();
+			_processors = new List<IUpdateProcessor>();
 		}
 
 		public static TelegramBot Create() => new TelegramBot();
 
-		public void AddModule<T>() where T : IMessageProcessingStrategy, new() => _processors.Add(new T());
+		public void AddModule<T>() where T : IUpdateProcessor, new() => _processors.Add(new T());
 
 		public async Task StartSafePollingAsync()
 		{
@@ -45,10 +45,7 @@ namespace Bot.Telegram.Core
 				{
 					foreach (var item in data)
 					{
-						if (item.Message == null)
-							continue;
-
-						var processingResults = _processors.Select(s => s.ProcessAsync(item.Message));
+						var processingResults = _processors.Select(s => s.ProcessAsync(item));
 						if (!processingResults.Any())
 							continue;
 
