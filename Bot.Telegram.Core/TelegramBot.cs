@@ -12,21 +12,22 @@ namespace Bot.Telegram.Core
 {
 	public sealed class TelegramBot
 	{
-		private readonly int _pollingSleepTime;
-		private readonly IList<IUpdateProcessor> _processors;
+		private readonly int _pollingSleepTime = 500;
+		private readonly IList<IUpdateProcessor> _processors = new List<IUpdateProcessor>();
 		private readonly IApiProvider _apiProvider;
 
-		public TelegramBot()
+		public TelegramBot() 
+			: this(new ApiProvider(new AppConfig()))
 		{
-			_pollingSleepTime = 500;
+		}
 
-			var appConfig = new AppConfig();
-			_apiProvider = new ApiProvider(appConfig);
-			_processors = new List<IUpdateProcessor>();
+		internal TelegramBot(IApiProvider apiProvider)
+		{
+			_apiProvider = apiProvider;
 		}
 
 		public static TelegramBot Create() => new TelegramBot();
-
+		
 		public void AddModule<T>(T module) where T : IUpdateProcessor
 			=> _processors.Add(module);
 		public void AddModule<T>() where T : IUpdateProcessor, new() 
@@ -47,33 +48,36 @@ namespace Bot.Telegram.Core
 					continue;
 
 				if (offset != 0)
-				{
-					foreach (var item in data)
-					{
-						var processingResults = _processors.Select(s => s.ProcessAsync(item));
-						if (!processingResults.Any())
-							continue;
-
-						try
-						{
-							foreach (var result in processingResults)
-							{
-								var request = await result;
-								if (request == null)
-									continue;
-
-								await _apiProvider.SendMessageAsync(request);
-							}
-						}
-						catch (Exception ex)
-						{
-							//TODO: add exception logging
-						}
-					}
-				}
+					await ProcessData(data);
 
 				offset = data.Last().UpdateId;
 				Thread.Sleep(_pollingSleepTime);
+			}
+		}
+
+		internal async Task ProcessData(IEnumerable<Update> data)
+		{
+			foreach (var item in data)
+			{
+				var processingResults = _processors.Select(s => s.ProcessAsync(item));
+				if (!processingResults.Any())
+					continue;
+
+				try
+				{
+					foreach (var result in processingResults)
+					{
+						var request = await result;
+						if (request == null)
+							continue;
+
+						await _apiProvider.SendMessageAsync(request);
+					}
+				}
+				catch (Exception ex)
+				{
+					//TODO: add exception logging
+				}
 			}
 		}
 	}
